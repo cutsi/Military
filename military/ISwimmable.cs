@@ -4,7 +4,8 @@ using System.Text;
 
 namespace military
 {
-    interface ISwimmable
+    public interface ISwimmable
     {
+        int Swim(int distance);
     }
 }

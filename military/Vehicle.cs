@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Text;
-
+using static military.Functions;
 namespace military
 {
     public abstract class Vehicle
@@ -29,6 +29,23 @@ namespace military
             return guid;
         }
 
+        public virtual int CalculateFuelConsumption(int distance)
+        {
+            return (distance * FuelConsumption) / 100;
+        }
+
+        public virtual int SimulateTrip(Vehicle myVehicle, int numberOfSoldiers)
+        {
+            var distance = myVehicle.GetDistance();
+            var numberOfTrips = CalculateNumberOfTrips(numberOfSoldiers, myVehicle.Capacity);
+            Console.WriteLine("number of trips: " + numberOfTrips);
+            var totalDistance = CalculateTotalDistance(numberOfTrips, distance);
+            Console.WriteLine("total distance: " + totalDistance);
+            var fuelConsumed = CalculateFuelConsumption(totalDistance);
+            Console.WriteLine("Fuel consumed: " + fuelConsumed);
+            Console.WriteLine();Console.WriteLine();
+            return fuelConsumed;
+        }
         public virtual void Print()
         {
             Console.WriteLine("ID: " + Id);
@@ -38,13 +55,10 @@ namespace military
             Console.WriteLine("Capacity: " + Capacity);
             Console.WriteLine();
         }
+        public virtual int GetDistance()
+        {
+            return 0;
+        }
     }
-}
 
-/*Id,
-Weight,
-AverageSpeed,
-FuelConsumption,
-Capacity
-id | težina | brzina | potrošnja | kapacitet | ukupno potrošeno gorivo
-*/
+}
