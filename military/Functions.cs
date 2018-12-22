@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace military
 {
@@ -29,9 +27,11 @@ namespace military
 
         public static int CalculateNumberOfTrips(int numberOfSoldiers, int capacity)
         {
-            if (capacity > numberOfSoldiers)
+            if (capacity >= numberOfSoldiers)
                 return 1;
-            return 2 * (numberOfSoldiers / capacity) - 1;
+            if(numberOfSoldiers > capacity && numberOfSoldiers % capacity == 0)
+                return 2 * (numberOfSoldiers / capacity) - 1;
+            return 2 * (numberOfSoldiers / capacity + 1) - 1;
         }
 
         public static int CalculateTotalDistance(int numberOfTrips, int distance)
@@ -42,14 +42,28 @@ namespace military
         public static void OptimumVehicle(int fuelConsumptionTank, int fuelConsumptionAmfibia,
             int fuelConsumptionWarship)
         {
-            if (fuelConsumptionWarship < fuelConsumptionAmfibia && fuelConsumptionWarship < fuelConsumptionTank)
-                Console.WriteLine("Optimum vehicle for transport is Warship");
+            var minimumConsumption = Math.Min(fuelConsumptionAmfibia, Math.Min(fuelConsumptionTank, fuelConsumptionWarship));
 
-            if (fuelConsumptionAmfibia < fuelConsumptionWarship && fuelConsumptionAmfibia < fuelConsumptionTank)
+            if(minimumConsumption == fuelConsumptionAmfibia)
                 Console.WriteLine("Optimum vehicle for transport is Amfibia");
-
-            if (fuelConsumptionTank < fuelConsumptionWarship && fuelConsumptionTank < fuelConsumptionAmfibia)
+   
+            if(minimumConsumption == fuelConsumptionTank)
                 Console.WriteLine("Optimum vehicle for transport is Tank");
+
+            if(minimumConsumption == fuelConsumptionWarship)
+                Console.WriteLine("Optimum vehicle for transport is Warship");
+        }
+
+        public static void Start()
+        {
+            var tank = new Tank(5000, 45);
+            var amfibia = new Amfibia(2500, 65);
+            var warship = new Warship(30000, 50);
+            var soldiers = GetSoldiers();
+            var fuelConsumptionTank = tank.SimulateTrip(tank, soldiers);
+            var fuelConsumptionAmfibia = amfibia.SimulateTrip(amfibia, soldiers);
+            var fuelConsumptionWarship = warship.SimulateTrip(warship, soldiers);
+            OptimumVehicle(fuelConsumptionTank, fuelConsumptionAmfibia, fuelConsumptionWarship);
         }
     }
 }
